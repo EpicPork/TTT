@@ -5,8 +5,6 @@ Version 3.3
 Last Updated: 11/02/2023
 """
 
-
-import psycopg2
 from psycopg2 import sql
 
 class GameDatabase:

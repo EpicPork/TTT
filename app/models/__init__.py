@@ -5,6 +5,7 @@ Version 3.2
 Tic Tac Toe 
 """
 
+from random import shuffle
 from game import game_model
 from game import game_view
 from game import game_database

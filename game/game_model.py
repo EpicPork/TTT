@@ -7,7 +7,7 @@ Last Updated: 10/27/2023
 
 # app/game/game_model.py
 
-import random
+from random import shuffle
 from app.game.game_database import GameDatabase  # Update the import path
 from app.models import User  # Update the import path if needed
 
