@@ -15,6 +15,7 @@ class Leaderboard(Base):
     user_id = Column(Integer, primary_key=True)
     wins = Column(Integer)
     losses = Column(Integer)
+    draws = Column(Integer)  # Add a new column for draws
 
     # Define a one-to-one relationship with the User table
     user = relationship("User", uselist=False, back_populates="leaderboard")

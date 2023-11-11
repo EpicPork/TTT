@@ -1,8 +1,8 @@
 """
 Portfolio Project 
 By: Cory Simmonsen
-Version 3.2
-Last Updated: 10/27/2023
+Version 3.3
+Last Updated: 11/02/2023
 """
 
 from random import shuffle
@@ -62,8 +62,12 @@ class TicTacToe:
                 if winner:
                     self.game_board.print_board()
                     self.data.display_result(winner)
-                    self.database.insert_game_result(self.data.player_name, self.game_board.size, winner)  # Insert game result into the database
-                    self.database.update_leaderboard(self.data.player_name, winner)  # Update the leaderboard
+                    # Insert game result into the database
+                    user_name = self.data.player_name  # Get the user's name
+                    game_result = winner
+                    self.database.insert_game_result(user_name, self.game_board.size, game_result)
+                    # Update the leaderboard
+                    self.database.update_leaderboard(user_name, game_result)
                     break
                 self.player_turn = False
             else:
@@ -73,8 +77,12 @@ class TicTacToe:
                 if winner:
                     self.game_board.print_board()
                     self.data.display_result(winner)
-                    self.database.insert_game_result("Computer", self.game_board.size, winner)  # Insert game result into the database
-                    self.database.update_leaderboard("Computer", winner)  # Update the leaderboard
+                    # Insert game result into the database
+                    user_name = "Computer"  # Set the user name as "Computer"
+                    game_result = winner
+                    self.database.insert_game_result(user_name, self.game_board.size, game_result)
+                    # Update the leaderboard
+                    self.database.update_leaderboard(user_name, game_result)
                     break
                 self.player_turn = True
 
@@ -89,7 +97,8 @@ class TicTacToe:
         """Display the leaderboard to the user."""
         leaderboard = self.database.fetch_leaderboard()  # Fetch the leaderboard from the database
         for entry in leaderboard:
-            print(f"{entry[0]} - Wins: {entry[1]}, Losses: {entry[2]}")
+            username, wins, losses, draws = entry
+            print(f"{username} - Wins: {wins}, Losses: {losses}, Draws: {draws}")
 
     def reset_game(self):
         self.data = Data()

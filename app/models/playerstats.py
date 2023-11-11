@@ -11,4 +11,5 @@ class PlayerStats(Base):
     user_id = Column(Integer, primary_key=True)
     total_wins = Column(Integer)
     total_losses = Column(Integer)
+    total_draws = Column(Integer)
 

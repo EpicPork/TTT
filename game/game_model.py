@@ -5,17 +5,18 @@ Version 3.2
 Last Updated: 10/27/2023
 """
 
-from game.database import insert_game_result, update_leaderboard
-from game.models import User  # Import User model if needed
+# app/game/game_model.py
 
-from random import randint, shuffle
-from game.game_database import insert_game_result, update_leaderboard
+import random
+from app.game.game_database import GameDatabase  # Update the import path
+from app.models import User  # Update the import path if needed
 
 class GameBoard:
     def __init__(self, size):
         # Initialize the game board with the specified size
         self.size = size
         self.board = [[" " for _ in range(size)] for _ in range(size)]
+        self.database = GameDatabase()  # Create an instance of GameDatabase
 
     def print_board(self):
         # Print the current state of the game board
@@ -73,14 +74,12 @@ class GameBoard:
 
     def end_game(self, result):
         # Save the game result in the database
-        user_id = self.get_user_id()  # You'll need to implement this method
-        insert_game_result(user_id, result, self.moves)
-
-        # Update the leaderboard
-        if result == "Draw":
-            update_leaderboard(user_id, result)
+        user_id = self.get_user_id(self.player_name)  # Call the get_user_id method
+        if user_id:
+            self.database.insert_game_result(user_id, self.size, result)  # Update to include size
+            self.database.update_leaderboard(user_id, result)  # Update the leaderboard
         else:
-            update_leaderboard(user_id, result)
+            print("User not found. Cannot save game result.")
 
 
 class Player:
@@ -249,15 +248,6 @@ class Data:
         row, col = best_move
         game_board.make_move(row, col, self.computer_symbol)
 
-    def display_result(self, winner):
-        # Display the result of the game
-        if winner == self.player_symbol:
-            print("Congratulations! You won!")
-        elif winner == self.computer_symbol:
-            print("Sorry, you lost!")
-            # Check for a draw condition
-        else: winner is None
-        print("It's a draw!")
         
     def available_moves(self, game_board):
         # Get a list of available moves on the game board
@@ -268,6 +258,16 @@ class Data:
                     moves.append((row, col))
         return moves
     
+    def display_result(self, winner):
+        # Display the result of the game
+        if winner == self.player_symbol:
+            print("Congratulations! You won!")
+        elif winner == self.computer_symbol:
+            print("Sorry, you lost!")
+            # Check for a draw condition
+        else: winner is None
+        print("It's a draw!")
+
     def end_game(self, result):
         # Save the game result in the database
         user_id = self.get_user_id(self.player_name)
