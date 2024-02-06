@@ -1,0 +1,35 @@
+/* Global styles for the body element */
+body {
+    font-family: Arial, sans-serif; /* Set the font for the webpage */
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    height: 100vh; /* Set the height of the body to fill the viewport */
+    background-color: #f0f0f0; /* Set a light gray background color */
+}
+
+/* Styles for the game board */
+.game-board {
+    display: grid; /* Use CSS Grid for layout */
+    grid-template-columns: repeat(3, 100px); /* Define 3 columns, each 100px wide */
+    grid-template-rows: repeat(3, 100px); /* Define 3 rows, each 100px high */
+    gap: 5px; /* Set gap between grid cells */
+}
+
+/* Styles for individual cells of the game board */
+.cell {
+    background-color: white; /* Set cell background color to white */
+    border: 2px solid #ddd; /* Add a light grey border */
+    font-size: 36px; /* Set font size for text inside cells */
+    color: black; /* Set text color */
+    display: flex; /* Use flexbox for layout within cells */
+    justify-content: center; /* Center content horizontally within cells */
+    align-items: center; /* Center content vertically within cells */
+    cursor: pointer; /* Change cursor to pointer to indicate interactivity */
+}
+
+/* Hover effect for cells */
+.cell:hover {
+    background-color: #efefef; /* Change background color on hover */
+}
+

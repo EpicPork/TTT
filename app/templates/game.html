@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character set declaration -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive design meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Title of the webpage -->
+    <title>Tic Tac Toe Game</title>
+
+    <!-- Linking the external CSS file for styling. 
+         The 'url_for' function dynamically sets the correct path to the static file. -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Favicon for the webpage -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <!-- Game board container -->
+    <div id="gameBoard" class="game-board">
+
+        <!-- First row of the Tic Tac Toe grid -->
+        <div class="row">
+            <div class="cell" data-cell-index="0"></div>
+            <div class="cell" data-cell-index="1"></div>
+            <div class="cell" data-cell-index="2"></div>
+        </div>
+
+        <!-- Second row of the Tic Tac Toe grid -->
+        <div class="row">
+            <div class="cell" data-cell-index="3"></div>
+            <div class="cell" data-cell-index="4"></div>
+            <div class="cell" data-cell-index="5"></div>
+        </div>
+
+        <!-- Third row of the Tic Tac Toe grid -->
+        <div class="row">
+            <div class="cell" data-cell-index="6"></div>
+            <div class="cell" data-cell-index="7"></div>
+            <div class="cell" data-cell-index="8"></div>
+        </div>
+    </div>
+
+    <!-- Linking the external JavaScript file for interactivity.
+         The 'url_for' function dynamically sets the correct path to the static file. -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+

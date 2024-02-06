@@ -1,22 +1,26 @@
 """
-Portfolio Project 
+Portfolio Project
 By: Cory Simmonsen
-Version 3.2
-Last Updated: 10/27/2023
+Version 3.4
+Last Updated: 12/20/2023
 """
 
 # app/game/game_model.py
 
 from random import shuffle
-from app.game.game_database import GameDatabase  # Update the import path
-from app.models import User  # Update the import path if needed
+from app.models.user import User
+from game.game_database import GameDatabase  # Update the import path
+from game.game_view import TicTacToe # Update the import path if needed
+
 
 class GameBoard:
     def __init__(self, size):
-        # Initialize the game board with the specified size
+        """
+        Initialize the game board with the specified size.
+        """
         self.size = size
         self.board = [[" " for _ in range(size)] for _ in range(size)]
-        self.database = GameDatabase()  # Create an instance of GameDatabase
+        self.database = GameDatabase()  # Placeholder for database instance
 
     def print_board(self):
         # Print the current state of the game board
@@ -34,18 +38,20 @@ class GameBoard:
 
     def get_user_id(self, username):
         # This method retrieves the user's ID based on the username
-        user = db.session.query(User).filter(User.username == username).first()
+        user = GameDatabase().session.query(User).filter(User.username == username).first()
         if user:
             return user.user_id
         else:
             return None  # Handle the case where the user is not found
 
     def make_move(self, row, col, symbol):
-        # Make a move on the game board at the specified row and column with the given symbol
-        if self.board[row][col] != " ":
-            return False
-        self.board[row][col] = symbol
-        return True
+        """
+        Make a move on the game board at the specified row and column with the given symbol.
+        """
+        if 0 <= row < self.size and 0 <= col < self.size and self.board[row][col] == " ":
+            self.board[row][col] = symbol
+            return True
+        return False
 
     def check_winner(self):
         # Check for a winning condition (rows, columns, diagonals)
@@ -84,15 +90,18 @@ class GameBoard:
 
 class Player:
     def __init__(self, name, symbol):
-        # Initialize a player with a name and symbol (X or O)
+        """
+        Initialize a player with a name and symbol (X or O).
+        """
         self.name = name
         self.symbol = symbol
+
 
     def make_move(self, game_board):
         # Prompt the player to make a move on the game board
         while True:
             try:
-                move = int (input("Select a position (1-{}):, ").format(game_board.size ** 2))
+                move = int(input(f"Select a position (1-{game_board.size ** 2}): "))
                 if 1 <= move <= game_board.size ** 2:
                     move -= 1
                     row = move // game_board.size
@@ -102,20 +111,22 @@ class Player:
                     else:
                         print("Invalid move. Position already taken.")
                 else:
-                    print("Invalid input. Enter a number between 1 and {}.".format(game_board.size ** 2))
+                    print(f"Invalid input. Enter a number between 1 and {game_board.size ** 2}.")
             except ValueError:
-                print("Invalid input. Enter a number between 1 and {}.".format(game_board.size ** 2))
-                
+                print(f"Invalid input. Enter a number between 1 and {game_board.size ** 2}.")
+
 
 class Data:
     def __init__(self):
-        # Initialize data attributes
+        """
+        Initialize data attributes.
+        """
         self.player_name = ""
         self.player_symbol = ""
         self.computer_symbol = ""
         self.computer_first = False
         self.difficulty_level = 0
-        self.board_size = 0  # Add board size attribute
+        self.board_size = 0
 
     def set_difficulty_level(self):
         # Prompt the user to set the difficulty level
@@ -248,6 +259,15 @@ class Data:
         row, col = best_move
         game_board.make_move(row, col, self.computer_symbol)
 
+    def display_result(self, winner):
+        # Display the result of the game
+        if winner == self.player_symbol:
+            print("Congratulations! You won!")
+        elif winner == self.computer_symbol:
+            print("Sorry, you lost!")
+            # Check for a draw condition
+        else: winner == None
+        print("It's a draw!")
         
     def available_moves(self, game_board):
         # Get a list of available moves on the game board
@@ -258,23 +278,4 @@ class Data:
                     moves.append((row, col))
         return moves
     
-    def display_result(self, winner):
-        # Display the result of the game
-        if winner == self.player_symbol:
-            print("Congratulations! You won!")
-        elif winner == self.computer_symbol:
-            print("Sorry, you lost!")
-            # Check for a draw condition
-        else: winner is None
-        print("It's a draw!")
 
-    def end_game(self, result):
-        # Save the game result in the database
-        user_id = self.get_user_id(self.player_name)
-        if user_id:
-            insert_game_result(user_id, result, self.moves)
-            update_leaderboard(user_id, result)
-        else:
-            print("User not found. Cannot save game result.")
-
-    # You'll need to implement the get_user_id method
